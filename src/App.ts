@@ -1,7 +1,11 @@
 import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
-import classRoute from "../src/Class_Shedule/class.route";
-
+import classRoutes from "./Class_Shedule/class.route";
+import incomeRoutes from "./budgetCalculation/income/income.routes";
+import expenseRoutes from "./budgetCalculation/liability/liability.routes";
+import summaryRoutes from "./budgetCalculation/summary/summary.routes";
+import studyRoutes from "./study/study.routes";
+import questionRoutes from "./Exam/ques.routes";
 const app = express();
 
 app.use(cors());
@@ -11,8 +15,12 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to Student Life Toolkit");
 });
 
-app.use("/api/classes", classRoute);
-
+app.use("/api/classes", classRoutes);
+app.use("/api/income", incomeRoutes);
+app.use("/api/expenses", expenseRoutes);
+app.use("/api/summary", summaryRoutes);
+app.use("/api/questions", questionRoutes);
+app.use("/api/study", studyRoutes);
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err.stack);
   res
