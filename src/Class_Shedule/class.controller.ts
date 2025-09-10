@@ -3,9 +3,7 @@ import Class, { IClass } from "./class.model";
 
 export const getClasses = async (req: Request, res: Response) => {
   try {
-    const userId = req.query.userId as string;
-    if (!userId) return res.status(400).json({ message: "UserId required" });
-    const classes = await Class.find({ userId });
+    const classes = await Class.find(); // ✅ userId check remove
     res.json(classes);
   } catch (err) {
     res.status(500).json({ message: (err as Error).message });
@@ -13,18 +11,15 @@ export const getClasses = async (req: Request, res: Response) => {
 };
 
 export const addClass = async (req: Request, res: Response) => {
-  const { subject, instructor, day, startTime, endTime, color, userId } =
-    req.body;
-
-  if (!subject || !instructor || !day || !startTime || !endTime || !userId) {
+  const { subject, instructor, day, startTime, endTime, color } = req.body;
+  if (!subject || !instructor || !day || !startTime || !endTime) {
     return res.status(400).json({ message: "All fields are required!" });
   }
-
-  if (startTime >= endTime)
+  if (startTime >= endTime) {
     return res
       .status(400)
       .json({ message: "Start time must be before end time!" });
-
+  }
   try {
     const newClass: IClass = new Class({
       subject,
@@ -33,7 +28,6 @@ export const addClass = async (req: Request, res: Response) => {
       startTime,
       endTime,
       color,
-      userId,
     });
     await newClass.save();
     res.status(201).json(newClass);
@@ -47,12 +41,11 @@ export const updateClass = async (req: Request, res: Response) => {
     const updatedClass = await Class.findByIdAndUpdate(
       req.params.id,
       req.body,
-      {
-        new: true,
-      }
+      { new: true }
     );
-    if (!updatedClass)
+    if (!updatedClass) {
       return res.status(404).json({ message: "Class not found" });
+    }
     res.json(updatedClass);
   } catch (err) {
     res.status(500).json({ message: (err as Error).message });

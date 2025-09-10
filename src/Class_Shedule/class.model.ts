@@ -7,7 +7,6 @@ export interface IClass extends Document {
   startTime: string;
   endTime: string;
   color: string;
-  userId: string;
 }
 
 const classSchema: Schema<IClass> = new Schema(
@@ -30,7 +29,6 @@ const classSchema: Schema<IClass> = new Schema(
     startTime: { type: String, required: true },
     endTime: { type: String, required: true },
     color: { type: String, default: "#4ade80" },
-    userId: { type: String, required: true },
   },
   { timestamps: true }
 );
